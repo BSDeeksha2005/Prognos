@@ -1,5 +1,7 @@
 # Prognos
 
+check out prognos @ https://prognos-ksmq.onrender.com/
+
 [![CI workflow configured](https://img.shields.io/badge/CI-workflow%20configured-4c8)](.github/workflows/ci.yml)
 
 Prognos is a research prototype for examining turbofan run-to-failure data and estimating remaining cycles from recent sensor windows. It uses NASA's simulated C-MAPSS data, beginning with FD001; it is not a spacecraft propulsion model. The console has separate Overview, Engine Registry, RUL Comparison, Model Evaluation, and Data Quality views. Search, sorting, engine detail, report export, and local ONNX scoring use the real evaluation report and model artifacts. Until a real benchmark run completes, values remain clearly marked as pending.
