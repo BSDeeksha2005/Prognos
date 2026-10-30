@@ -1,6 +1,6 @@
 # Prognos
 
-check out prognos @ https://prognos-ksmq.onrender.com/
+live at @ https://prognos-ksmq.onrender.com/
 
 [![CI workflow configured](https://img.shields.io/badge/CI-workflow%20configured-4c8)](.github/workflows/ci.yml)
 
