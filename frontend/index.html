@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4f6f8">
+  <meta name="description" content="Prognos research workspace for NASA C-MAPSS FD001 turbofan remaining useful life evaluation.">
+  <title>Prognos | Engine Prognostics</title>
+  <link rel="stylesheet" href="/assets/style.css?v=6">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="masthead">
+      <a class="wordmark" href="#overview" data-go-view="overview" aria-label="Prognos overview">
+        <span class="sigil" aria-hidden="true">P</span>
+        <span class="brand-name">PROGNOS<small>ENGINE PROGNOSTICS / FD001</small></span>
+      </a>
+      <div class="masthead-context"><span class="context-mark"></span><span>NASA C-MAPSS</span><span class="context-divider">/</span><strong>FD001</strong></div>
+      <div class="masthead-actions">
+        <span class="service-state" id="apiState" aria-live="polite"><i></i><span>CONNECTING</span></span>
+        <button class="button button-quiet" id="refreshButton" type="button">Refresh data</button>
+        <button class="button button-outline" id="exportReport" type="button" disabled>Export</button>
+        <button class="button button-primary" id="openInference" type="button" aria-label="Score an engine" disabled><span class="button-copy">Score engine</span><span aria-hidden="true">↗</span></button>
+      </div>
+    </header>
+
+    <div class="workspace">
+      <aside class="rail">
+        <nav class="rail-top" aria-label="Workspace sections" role="tablist" aria-orientation="vertical">
+          <span class="rail-caption">WORKSPACE</span>
+          <button class="rail-link selected" id="tab-overview" type="button" role="tab" aria-label="Overview" aria-selected="true" aria-controls="page-overview" tabindex="0" data-view="overview">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><rect x="3" y="3" width="5" height="5"/><rect x="12" y="3" width="5" height="5"/><rect x="3" y="12" width="5" height="5"/><rect x="12" y="12" width="5" height="5"/></svg><span>Overview</span>
+          </button>
+          <button class="rail-link" id="tab-engines" type="button" role="tab" aria-label="Engine registry" aria-selected="false" aria-controls="page-engines" tabindex="-1" data-view="engines">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="6.5"/><circle cx="10" cy="10" r="2"/><path d="M10 1.8v2M10 16.2v2M1.8 10h2m12.4 0h2"/></svg><span>Engine registry</span>
+          </button>
+          <button class="rail-link" id="tab-comparison" type="button" role="tab" aria-label="RUL comparison" aria-selected="false" aria-controls="page-comparison" tabindex="-1" data-view="comparison">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 16V4m0 12h14M5 13l3-3 3 2 5-6"/></svg><span>RUL comparison</span>
+          </button>
+          <button class="rail-link" id="tab-models" type="button" role="tab" aria-label="Model evaluation" aria-selected="false" aria-controls="page-models" tabindex="-1" data-view="models">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 5h12M4 10h12M4 15h7"/><circle cx="2.5" cy="5" r=".5"/><circle cx="2.5" cy="10" r=".5"/><circle cx="2.5" cy="15" r=".5"/></svg><span>Model evaluation</span>
+          </button>
+          <button class="rail-link" id="tab-quality" type="button" role="tab" aria-label="Data quality" aria-selected="false" aria-controls="page-quality" tabindex="-1" data-view="quality">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 2.5 16 5v4.8c0 3.6-2.5 6.3-6 7.8-3.5-1.5-6-4.2-6-7.8V5z"/><path d="m7.5 9.8 1.7 1.7 3.4-3.6"/></svg><span>Data quality</span>
+          </button>
+        </nav>
+        <div class="rail-bottom">
+          <div class="dataset-card"><span class="eyebrow">BENCHMARK SET</span><div class="dataset-name"><span class="dataset-mark">01</span><strong>NASA C-MAPSS<br>FD001</strong></div><div class="dataset-state" id="datasetState"><i></i><span>CHECKING</span></div><div class="dataset-detail">Simulated turbofan data<br>One operating condition</div></div>
+          <div class="rail-footer"><span class="build-dot"></span> RESEARCH BUILD <span class="build-number">0.1.0</span></div>
+        </div>
+      </aside>
+
+      <main id="mainContent" class="main-content">
+        <section class="workspace-view active" id="page-overview" role="tabpanel" aria-labelledby="tab-overview" data-page="overview">
+          <header class="page-head">
+            <div><div class="breadcrumbs">ENGINE HEALTH <span>/</span> BENCHMARK OVERVIEW</div><h1>Remaining life, assessed from evidence.</h1><p class="subhead">A research workspace for run-to-failure turbofan data.</p></div>
+            <span class="page-stamp">LAST-CYCLE EVALUATION</span>
+          </header>
+
+          <section class="readiness-banner" id="readinessBanner" data-state="loading" aria-label="Dataset readiness" aria-live="polite">
+            <div class="readiness-symbol" id="readinessSymbol"><span>…</span></div>
+            <div class="readiness-copy"><span class="eyebrow amber-text" id="readinessTitle">CHECKING BENCHMARK</span><strong id="readinessMessage">Connecting to the local evaluation service.</strong><p id="readinessDetail">No prediction values are shown until a real model run is available.</p></div>
+            <div class="file-manifest" aria-label="Required FD001 files">
+              <div class="file-check" data-file="train_FD001.txt"><span class="file-state">·</span><code>train_FD001.txt</code><small>CHECKING</small></div>
+              <div class="file-check" data-file="test_FD001.txt"><span class="file-state">·</span><code>test_FD001.txt</code><small>CHECKING</small></div>
+              <div class="file-check" data-file="RUL_FD001.txt"><span class="file-state">·</span><code>RUL_FD001.txt</code><small>CHECKING</small></div>
+            </div>
+            <div class="readiness-code"><b id="fileProgress">— / 3</b><br><span>SOURCE FILES</span></div>
+          </section>
+
+          <section class="stat-strip" aria-label="Evaluation summary">
+            <article class="stat"><span class="eyebrow">TEST ENGINES</span><div class="stat-value" id="engineCount">— <small>units</small></div><div class="stat-note" id="engineCountNote">Awaiting terminal predictions</div></article>
+            <article class="stat"><span class="eyebrow">MEDIAN ESTIMATED RUL</span><div class="stat-value" id="medianRul">— <small>cycles</small></div><div class="stat-note">At final observed cycle</div></article>
+            <article class="stat"><span class="eyebrow">CNN VALIDATION RMSE</span><div class="stat-value" id="validationRmse">— <small>cycles</small></div><div class="stat-note">Held-out engines · lower is better</div></article>
+            <article class="stat"><span class="eyebrow">CHANNELS FLAGGED</span><div class="stat-value" id="sensorsFlagged">— <small>/ 21</small></div><div class="stat-note">Train/test PSI and KS checks</div></article>
+          </section>
+
+          <div class="content-grid overview-grid">
+            <article class="panel chart-panel">
+              <div class="panel-head"><div><span class="eyebrow">HELD-OUT TEST SET</span><h2>Estimated vs reference RUL</h2><p>Each mark represents one test engine’s terminal cycle.</p></div><button class="text-button" type="button" data-go-view="comparison">Full comparison <span aria-hidden="true">→</span></button></div>
+              <div class="chart-stage"><div class="chart-y" id="overviewY"><span>125</span><span>100</span><span>75</span><span>50</span><span>25</span><span>0</span></div><div class="plot-area"><div class="plot-grid"><i></i><i></i><i></i><i></i><i></i><i></i></div><svg class="plot-svg" id="overviewPlot" viewBox="0 0 1000 300" preserveAspectRatio="none" role="img" aria-label="Estimated RUL compared with reference RUL"></svg><div class="plot-empty" id="overviewPlotEmpty"><div class="empty-flow-top"><span class="flow-index">01</span><div><strong>NO BENCHMARK OUTPUT</strong><span>Run the real FD001 pipeline to populate this view.</span></div></div><div class="flow-track"><div class="flow-step"><small>INPUT</small><b>Cycle data</b><span>26 fields per row</span></div><i></i><div class="flow-step"><small>WINDOW</small><b>Sensor history</b><span>Latest cycles</span></div><i></i><div class="flow-step"><small>OUTPUT</small><b>RUL estimate</b><span>Cycles remaining</span></div></div><code>make train</code></div><div class="chart-x"><span>0</span><span>REFERENCE RUL · CYCLES</span><span>125</span></div></div></div>
+              <div class="chart-legend"><span><i class="legend-dot estimate"></i>Engine estimate</span><span><i class="legend-line"></i>Perfect agreement</span></div>
+            </article>
+            <article class="panel profile-panel">
+              <div class="panel-head"><div><span class="eyebrow">BENCHMARK ENVELOPE</span><h2>What FD001 represents</h2><p>NASA simulated degradation data</p></div><span class="profile-id">FD<span>001</span></span></div>
+              <div class="profile-body"><h3>Single operating condition</h3><p>One simulated high-pressure compressor degradation mode.</p><div class="profile-facts"><div><strong>21</strong><span>sensor channels</span></div><div><strong>3</strong><span>operating settings</span></div><div><strong>1</strong><span>fault mode</span></div></div><div class="scope-note"><span class="eyebrow">SCOPE</span><p>Research benchmark, not live spacecraft telemetry or maintenance authorization.</p></div></div>
+              <div class="sensor-footer"><span>ACTIVE MODEL CHANNELS <b id="sensorCount">— / 21</b></span><span id="sensorState" class="sensor-state"><i></i><span>NOT EVALUATED</span></span></div>
+            </article>
+          </div>
+
+          <div class="content-grid lower-grid">
+            <article class="panel compact-panel"><div class="panel-head"><div><span class="eyebrow">LOWEST ESTIMATES</span><h2>Engine watchlist</h2><p>Sorted by predicted cycles remaining.</p></div><button class="text-button" type="button" data-go-view="engines">Open registry <span aria-hidden="true">→</span></button></div><div class="table-wrap"><table><thead><tr><th>ENGINE</th><th>LAST CYCLE</th><th>EST. RUL</th><th>REFERENCE</th></tr></thead><tbody id="watchRows"><tr><td colspan="4" class="table-empty">No test predictions available yet.</td></tr></tbody></table></div></article>
+            <article class="panel compact-panel"><div class="panel-head"><div><span class="eyebrow">MODEL COMPARISON</span><h2>Held-out test results</h2><p>Test metrics appear after evaluation.</p></div><button class="text-button" type="button" data-go-view="models">View results <span aria-hidden="true">→</span></button></div><div class="model-summary" id="modelSummary"><div class="summary-placeholder"><span class="placeholder-mark">—</span><div><strong>Evaluation not run</strong><p>Baseline and CNN scores will appear here.</p></div></div></div></article>
+          </div>
+          <footer class="page-footer"><span>PROGNOS · ENGINE PROGNOSTICS RESEARCH</span><span>FD001 IS SIMULATED DATA · NOT OPERATIONAL MAINTENANCE GUIDANCE</span></footer>
+        </section>
+
+        <section class="workspace-view" id="page-engines" role="tabpanel" aria-labelledby="tab-engines" data-page="engines" hidden>
+          <header class="page-head"><div><div class="breadcrumbs">ENGINE HEALTH <span>/</span> TEST SET</div><h1>Engine registry</h1><p class="subhead">Terminal-cycle estimates, ordered by remaining useful life.</p></div><div class="page-stat"><strong id="registryCount">—</strong><span>test engines</span></div></header>
+          <section class="panel registry-panel"><div class="registry-toolbar"><label class="search-field"><span class="sr-only">Search engine unit</span><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5"/><path d="m13 13 4 4"/></svg><input id="engineSearch" type="search" placeholder="Search engine ID" autocomplete="off"></label><span class="result-count" id="registrySummary" aria-live="polite">Waiting for evaluation data</span><button class="button button-quiet" id="clearEngineSearch" type="button">Clear</button></div><div class="table-wrap"><table class="data-table"><thead><tr><th><button type="button" data-sort="unit_id">ENGINE <span>↕</span></button></th><th><button type="button" data-sort="last_cycle">LAST CYCLE <span>↕</span></button></th><th><button type="button" data-sort="predicted_rul">ESTIMATED RUL <span>↕</span></button></th><th><button type="button" data-sort="actual_rul">REFERENCE RUL <span>↕</span></button></th><th>ABS. ERROR</th><th>REVIEW ORDER</th></tr></thead><tbody id="registryRows"><tr><td colspan="6" class="table-empty">Engine records appear after a completed test evaluation.</td></tr></tbody></table></div><div class="panel-footnote">Review order is a sort aid based on model estimates, not a maintenance priority or action.</div></section>
+          <footer class="page-footer"><span>TEST LABELS ARE PROVIDED AT EACH ENGINE’S LAST OBSERVED CYCLE</span><span>ESTIMATES REQUIRE DOMAIN REVIEW</span></footer>
+        </section>
+
+        <section class="workspace-view" id="page-comparison" role="tabpanel" aria-labelledby="tab-comparison" data-page="comparison" hidden>
+          <header class="page-head"><div><div class="breadcrumbs">ENGINE HEALTH <span>/</span> MODEL PERFORMANCE</div><h1>RUL comparison</h1><p class="subhead">Compare predicted remaining cycles with held-out reference labels.</p></div><span class="page-stamp">TEST SET · TERMINAL CYCLE</span></header>
+          <div class="comparison-metrics"><article class="metric-card"><span class="eyebrow">EVALUATED ENGINES</span><strong id="comparisonCount">—</strong><small>terminal records</small></article><article class="metric-card"><span class="eyebrow">CNN TEST RMSE</span><strong id="comparisonRmse">—</strong><small>cycles · lower is better</small></article><article class="metric-card"><span class="eyebrow">CNN NASA SCORE</span><strong id="comparisonNasa">—</strong><small>asymmetric penalty · lower is better</small></article><article class="metric-card"><span class="eyebrow">MEAN SIGNED ERROR</span><strong id="comparisonBias">—</strong><small>estimate minus reference</small></article></div>
+          <article class="panel comparison-panel"><div class="panel-head"><div><span class="eyebrow">ENGINE-LEVEL AGREEMENT</span><h2>Predicted against actual</h2><p>The diagonal marks perfect agreement; deviations show per-engine error.</p></div><span class="model-badge" id="comparisonBadge">AWAITING TEST</span></div><div class="scatter-wrap"><div class="axis-title y-axis-title">ESTIMATED RUL · CYCLES</div><div class="chart-stage comparison-chart"><div class="chart-y" id="comparisonY"><span>125</span><span>100</span><span>75</span><span>50</span><span>25</span><span>0</span></div><div class="plot-area"><div class="plot-grid"><i></i><i></i><i></i><i></i><i></i><i></i></div><svg class="plot-svg" id="comparisonPlot" viewBox="0 0 1000 300" preserveAspectRatio="none" role="img" aria-label="Scatter plot comparing predicted and actual RUL by engine"></svg><div class="plot-empty" id="comparisonPlotEmpty"><div class="empty-state"><span class="empty-icon">↗</span><strong>Comparison is not available yet</strong><p>Add the FD001 data and run <code>make train</code>. No sample scores are shown.</p></div></div><div class="chart-x"><span>0</span><span>REFERENCE RUL · CYCLES</span><span>125</span></div></div></div><div class="axis-title x-axis-title">REFERENCE RUL · CYCLES</div></div><div class="chart-legend"><span><i class="legend-dot estimate"></i>Test engine</span><span><i class="legend-line"></i>Perfect agreement</span></div></article>
+          <article class="panel error-panel"><div class="panel-head"><div><span class="eyebrow">LARGEST DEVIATIONS</span><h2>Engine residuals</h2><p>Signed error = estimate − reference; positive means over-estimation.</p></div></div><div class="table-wrap"><table><thead><tr><th>ENGINE</th><th>REFERENCE</th><th>ESTIMATE</th><th>SIGNED ERROR</th></tr></thead><tbody id="residualRows"><tr><td colspan="4" class="table-empty">Residuals appear after test evaluation.</td></tr></tbody></table></div></article>
+          <footer class="page-footer"><span>NASA C-MAPSS FD001 · SIMULATED TURBOFAN BENCHMARK</span><span>NOT A FLIGHT-QUALIFIED PREDICTION SYSTEM</span></footer>
+        </section>
+
+        <section class="workspace-view" id="page-models" role="tabpanel" aria-labelledby="tab-models" data-page="models" hidden>
+          <header class="page-head"><div><div class="breadcrumbs">ENGINE HEALTH <span>/</span> BENCHMARK RESULTS</div><h1>Model evaluation</h1><p class="subhead">Validation and test performance, reported separately.</p></div><span class="page-stamp" id="modelEvaluationState">NO RUN RECORDED</span></header>
+          <article class="panel model-evaluation-panel"><div class="panel-head"><div><span class="eyebrow">HELD-OUT TEST SET</span><h2>Baseline and neural comparison</h2><p>Test scores are for final reporting only; model selection uses validation engines.</p></div></div><div class="table-wrap"><table><thead><tr><th>MODEL</th><th>VALIDATION RMSE</th><th>TEST RMSE</th><th>TEST NASA SCORE</th><th>STATUS</th></tr></thead><tbody id="modelRows"><tr><td colspan="5" class="table-empty">No measured scores yet. Add FD001 files and run <code>make train</code>.</td></tr></tbody></table></div></article>
+          <article class="panel experiments-panel"><div class="panel-head"><div><span class="eyebrow">SEEDED CNN SEARCH</span><h2>Neural experiment runs</h2><p>Hyperparameters and held-out validation RMSE recorded from each completed run.</p></div><span class="model-badge" id="experimentCount">0 / 5</span></div><div class="table-wrap"><table><thead><tr><th>RUN</th><th>WINDOW</th><th>HIDDEN SIZE</th><th>DROPOUT</th><th>LEARNING RATE</th><th>VALIDATION RMSE</th></tr></thead><tbody id="experimentRows"><tr><td colspan="6" class="table-empty">Experiment results are pending the real training run.</td></tr></tbody></table></div><div class="panel-footnote">The CNN is compared against LightGBM; a model is not assumed to win.</div></article>
+          <footer class="page-footer"><span>MODEL SELECTION: HELD-OUT VALIDATION ENGINES</span><span>FINAL METRICS: HELD-OUT TEST ENGINES</span></footer>
+        </section>
+
+        <section class="workspace-view" id="page-quality" role="tabpanel" aria-labelledby="tab-quality" data-page="quality" hidden>
+          <header class="page-head"><div><div class="breadcrumbs">ENGINE HEALTH <span>/</span> INPUT MONITORING</div><h1>Data quality</h1><p class="subhead">Source-file readiness and train/test sensor distribution checks.</p></div><span class="page-stat"><strong id="qualityFlagCount">—</strong><span>channels flagged</span></span></header>
+          <div class="quality-grid">
+            <article class="panel file-panel"><div class="panel-head"><div><span class="eyebrow">SOURCE VALIDATION</span><h2>FD001 input files</h2><p>Headerless, whitespace-separated data in <code>data/raw/</code>.</p></div><span class="quality-state" id="qualityFileState">CHECKING</span></div><div class="quality-file-list" id="qualityFiles"><div class="quality-file" data-file="train_FD001.txt"><span class="quality-file-icon">·</span><div><strong>Training trajectories</strong><code>train_FD001.txt</code></div><small>CHECKING</small></div><div class="quality-file" data-file="test_FD001.txt"><span class="quality-file-icon">·</span><div><strong>Test trajectories</strong><code>test_FD001.txt</code></div><small>CHECKING</small></div><div class="quality-file" data-file="RUL_FD001.txt"><span class="quality-file-icon">·</span><div><strong>Terminal RUL labels</strong><code>RUL_FD001.txt</code></div><small>CHECKING</small></div></div><div class="panel-footnote">The test RUL file labels each test engine at its final observed cycle.</div></article>
+            <article class="panel drift-panel"><div class="panel-head"><div><span class="eyebrow">DISTRIBUTION CHECK</span><h2>Train vs test sensor drift</h2><p>PSI and two-sample KS · measured on raw sensor values.</p></div><span class="model-badge" id="driftRunState">NOT RUN</span></div><div class="drift-explainer"><div><strong>Population Stability Index</strong><span>Flags larger distribution shifts (threshold 0.20).</span></div><div><strong>Kolmogorov–Smirnov test</strong><span>Flags statistically significant differences (p &lt; 0.05).</span></div></div><p class="caution-note">These checks identify distribution change only. They do not diagnose a fault or trigger maintenance action.</p></article>
+          </div>
+          <article class="panel sensor-panel"><div class="panel-head"><div><span class="eyebrow">21 BENCHMARK CHANNELS</span><h2>Sensor distribution status</h2><p>Each channel is evaluated only after the FD001 pipeline runs.</p></div><span class="result-count" id="sensorResultCount">0 channels evaluated</span></div><div class="table-wrap"><table><thead><tr><th>CHANNEL</th><th>PSI</th><th>KS STATISTIC</th><th>KS P-VALUE</th><th>STATUS</th></tr></thead><tbody id="qualityRows"><tr><td colspan="5" class="table-empty">No drift measurements recorded. Values will not be synthesized.</td></tr></tbody></table></div></article>
+          <footer class="page-footer"><span>TRAIN / TEST COMPARISON · NOT A LIVE FLEET MONITOR</span><span>FD001 IS A SIMULATED SINGLE-CONDITION DATASET</span></footer>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <dialog id="inferenceDialog" class="dialog-card">
+    <form method="dialog" class="dialog-head"><div><span class="eyebrow">LOCAL ONNX INFERENCE</span><h2>Score an engine window</h2><p>Choose a headerless C-MAPSS file. The browser sends the selected engine’s latest sensor window to this local API.</p></div><button class="icon-button dialog-close" aria-label="Close dialog">×</button></form>
+    <div class="dialog-fields"><label>Cycle file<input id="cycleFile" type="file" accept=".txt,.csv,text/plain,text/csv"></label><label>Engine unit<select id="engineSelect" disabled><option>Select a cycle file first</option></select></label></div>
+    <p class="dialog-hint" id="inferenceHint">Expected 26 whitespace-separated columns: unit, cycle, 3 settings, 21 sensors.</p>
+    <button class="button button-primary inference-submit" id="runInference" type="button" disabled>Run prediction</button>
+    <div class="inference-result" id="inferenceResult" aria-live="polite" hidden></div>
+  </dialog>
+  <dialog id="engineDialog" class="dialog-card engine-dialog"><form method="dialog" class="dialog-head"><div><span class="eyebrow">TEST ENGINE DETAIL</span><h2 id="engineDialogTitle">Engine</h2><p id="engineDialogNote">Terminal-cycle evaluation record.</p></div><button class="icon-button" aria-label="Close dialog">×</button></form><div class="engine-detail-grid" id="engineDetailGrid"></div><p class="caution-note">An RUL estimate is a research output, not an autonomous maintenance recommendation.</p></dialog>
+  <script src="/assets/app.js?v=6"></script>
+</body>
+</html>

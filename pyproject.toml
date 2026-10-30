@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools==75.8.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "prognos"
+version = "0.1.0"
+description = "Leakage-aware turbofan remaining useful life prediction"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+  "numpy==2.2.3", "pandas==2.2.3", "scikit-learn==1.6.1", "lightgbm==4.6.0",
+  "torch==2.6.0", "onnx==1.17.0", "onnxruntime==1.20.1", "fastapi==0.115.8",
+  "uvicorn[standard]==0.34.0", "pydantic==2.10.6", "mlflow==2.20.2",
+  "scipy==1.15.2", "matplotlib==3.10.0"
+]
+
+[project.optional-dependencies]
+dev = ["pytest==8.3.4", "httpx==0.28.1", "ruff==0.9.7"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
